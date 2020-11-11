@@ -26,7 +26,7 @@ namespace Lab1
         public double activatedValue;
         public string output;
     }
-
+ 
     class Network
     {
         List<PatternNeuron> Patterns;
