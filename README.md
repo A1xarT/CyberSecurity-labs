@@ -1,2 +1,0 @@
-# CyberSecurity-labs
-CyberSecurity labs
