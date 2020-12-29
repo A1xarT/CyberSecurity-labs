@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Diagnostics;
 
 namespace Lab1
 {
+    [Serializable]
     class PatternNeuron
     {
         public PatternNeuron(double[] inputLayer, string outputWord)
@@ -26,10 +28,10 @@ namespace Lab1
         public double activatedValue;
         public string output;
     }
-    
+    [Serializable]
     class Network
     {
-        List<PatternNeuron> Patterns;
+        private readonly List<PatternNeuron> Patterns;
         public Network()
         {
             Patterns = new List<PatternNeuron> { };
@@ -38,7 +40,7 @@ namespace Lab1
         public void Train(List<List<double>> records, List<string> outputs)
         {
             int recordsNumber = records.Count;
-            for(int i = 0; i < recordsNumber; i++)
+            for (int i = 0; i < recordsNumber; i++)
             {
                 PatternNeuron pNeuron = new PatternNeuron(records[i].ToArray(), outputs[i]);
                 Patterns.Add(pNeuron);
@@ -47,16 +49,20 @@ namespace Lab1
         }
         public Tuple<string, long> GetAnswer(List<double> record)
         {
-            long elapsedTime = DateTime.Now.Ticks;
-            for(int i = 0; i < Patterns.Count; i++)
+            Stopwatch stopwatch = new Stopwatch();
+            stopwatch.Start();
+            for (int i = 0; i < Patterns.Count; i++)
             {
                 Patterns[i].ActivateNeruon(record.ToArray());
-                if(Patterns[i].activatedValue == Patterns[i].weights.Length)
-                    return new Tuple<string, long>(Patterns[i].output, DateTime.Now.Ticks - elapsedTime);
+                if (Patterns[i].activatedValue == 41)
+                {
+                    stopwatch.Stop();
+                    return new Tuple<string, long>(Patterns[i].output, stopwatch.ElapsedMilliseconds);
+                }
             }
-            var fittingNeuron = Patterns.OrderBy(p=>p.activatedValue).Last();
-            return new Tuple<string, long>(fittingNeuron.output, DateTime.Now.Ticks - elapsedTime);
+            var fittingNeuron = Patterns.OrderBy(p => p.activatedValue).Last();
+            stopwatch.Stop();
+            return new Tuple<string, long>(fittingNeuron.output, stopwatch.ElapsedMilliseconds);
         }
-
     }
 }
