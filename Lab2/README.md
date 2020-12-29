@@ -1,1 +1,1 @@
-Markov chains' model for determining Behavioral patterns from images data
+Markov chains' model for determining behavioral patterns from images data
